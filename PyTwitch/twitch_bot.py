@@ -1,5 +1,5 @@
 import traceback
-from typing import Callable, List
+from typing import Callable, List, Dict
 
 from .irc_protocol import IrcProtocol
 
@@ -72,7 +72,7 @@ class Command:
     """
     A command it self
     """
-    def __init__(self, func: Callable[[Context, str, ...], None]):
+    def __init__(self, func: Callable[[Context, List[str]], None]):
         self.func = func
 
     def call(self, ctx: Context, arguments: List[any]) -> None:
@@ -85,7 +85,7 @@ class TwitchBot:
     def __init__(self, prefix: str="!"):
         self._irc = IrcProtocol()
         self.channels: List[Channel] = []
-        self.commands = List[Command] = []
+        self.commands: Dict[str, Commands] = {}
 
         check_type("prefix", prefix, str)
         self.prefix = prefix
