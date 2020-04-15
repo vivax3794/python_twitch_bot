@@ -34,6 +34,20 @@ class TwitchBot(TwitchCore):
         return self._import_cog(current_object, import_paths)
 
     def load_cog(self, cog_name: str) -> None:
+        """
+        Load a cog.
+
+        The cog_name is the path to the file, so if I has a cog in cogs/info.py
+        I would set cog_name to "cogs.info"
+
+        Once a cog is loaded, it get's it's setup function run.
+        here is a example of a cog:
+
+        def setup(bot):
+            @bot.command()
+            def test(ctx):
+                ctx.reply("Hello World!")
+        """
         cog = __import__(cog_name)
         import_path = cog_name.split(".")[1:]
         cog = self._import_cog(cog, import_path)
