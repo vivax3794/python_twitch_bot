@@ -8,6 +8,7 @@ class IrcProtocol:
     """
     def __init__(self):
         self._sock = SocketWrapper()
+        self._data: List[str] = []
 
     def connect(self, server: str, port: int=667) -> None:
         """
@@ -16,7 +17,6 @@ class IrcProtocol:
         If no port is given it will default to 6667.
         """
         self._sock.connect(server, port)
-        self._data: List[str] = []
 
     def login(self, username: str, password: str) -> None:
         """
