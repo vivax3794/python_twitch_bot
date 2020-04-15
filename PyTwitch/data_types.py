@@ -14,7 +14,6 @@ class Channel:
         """
         Send a message in the channel.
         """
-        check_type("message", message, str)
         self._bot.send_message(self.name, message)
 
 
@@ -40,7 +39,6 @@ class Message:
         """
         Reply to the message.
         """
-        check_type("message", message, str)
         self.channel.send_message(message)
 
 

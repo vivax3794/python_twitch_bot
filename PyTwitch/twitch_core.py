@@ -32,14 +32,14 @@ class TwitchCore:
 
         return channel
 
-    def send_message(self, channel_name: str, message: str) -> None:
+    def send_message(self, channel_name: str, message: any) -> None:
         """
         Send message in a channel.
 
         If you have the channel object use it's send method instead.
         """
+        message = str(message)
         check_type("channel_name", channel_name, str)
-        check_type("message", message, str)
 
         self._irc.send_message(channel_name, message)
 
