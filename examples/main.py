@@ -5,11 +5,13 @@ from secret import TOKEN
 COGS = [
         "info"
         ]
+BOT_NAME = "therealvivax"
+CHANNEL = "vivax3794"
 
 bot = TwitchBot()
-bot.connect("therealvivax", TOKEN)
+bot.connect(BOT_NAME, TOKEN)
 
-channel = bot.join_channel("vivax3794")
+channel = bot.join_channel(TOKEN)
 
 for cog in COGS:
     bot.load_cog(f"cogs.{cog}")
