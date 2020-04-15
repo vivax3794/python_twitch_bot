@@ -43,6 +43,12 @@ class IrcProtocol:
         """
         if not self._data:
             new_data = self._sock.read().split("\n")
+
+            # respond to PING messages
+            for message in new_data:
+                if "PING" in message:
+                    self._sock.send("PONG")
+
             self._data.extend(new_data)
 
         return self._data.pop(0)
