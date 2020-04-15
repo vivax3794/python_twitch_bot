@@ -42,6 +42,9 @@ class TwitchApi:
         return response.json()["chatters"]
 
     def chatters_no_roles(self, channel: str) -> List[str]:
+        """
+        Returns just a list of chatters, instead of divided into roles.
+        """
         chatters_with_roles = self.chatters(channel)
         chatters: List[str] = []
 
