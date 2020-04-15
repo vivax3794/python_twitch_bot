@@ -47,3 +47,8 @@ Before pushing something, please make sure your code is working as expected.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## thanks to:
+* Ivan Sakal, for the README, licenses and setup.py
+* Everybody on my stream helping me out :)
+* stupac62 for making me destroy my pc so I could make sound work xD
