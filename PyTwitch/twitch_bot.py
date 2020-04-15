@@ -25,6 +25,20 @@ class TwitchBot(TwitchCore):
             except Exception as e:
                 self.event_error(e)
 
+    def _import_cog(self, current_object, import_paths: List[None]):
+        if len(import_paths) == 0:
+            return current_object
+
+        attr = import_paths.pop(0)
+        current_object = getattr(current_object, attr)
+        return self._import_cog(current_object, import_paths)
+
+    def load_cog(self, cog_name: str) -> None:
+        cog = __import__(cog_name)
+        import_path = cog_name.split(".")[1:]
+        cog = self._import_cog(cog, import_path)
+        cog.setup(self)
+
     def process_message(self, message: Message) -> None:
         """
         Check if the message is a command.
