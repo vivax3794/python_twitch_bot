@@ -69,5 +69,5 @@ class TwitchCore:
                 message = ":".join(message)
 
                 channel = Channel(channel, self)
-                user = User(user, self)
+                user = User(user, channel, self)
                 return Message(user, channel, message)

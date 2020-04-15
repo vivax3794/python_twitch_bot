@@ -21,9 +21,24 @@ class User:
     """
     A twitch user.
     """
-    def __init__(self, username: str, twitch_bot):
+    def __init__(self, username: str, channel: Channel, twitch_bot):
         self.name = username
+        self.channel = channel
         self._bot = twitch_bot
+
+    @property
+    def role(self):
+        """
+        The highest role of the user.
+        """
+        chatters = self._bot.api.chatters(self.channel.name)
+        for role, users in chatters.items():
+            if self.name in users:
+                role = role.rstrip("s")
+                return role
+
+        else:
+            raise ValueError(f"user {self.name} was not found in the chatters list.")
 
 
 class Message:
