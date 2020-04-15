@@ -14,5 +14,5 @@ channel = bot.join_channel("vivax3794")
 for cog in COGS:
     bot.load_cog(f"cogs.{cog}")
 
-bot.run()
-# SOME CHANGE THAT GIT SHOULD FIND
+if __name__ == "__main__":
+    bot.run()
