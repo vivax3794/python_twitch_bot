@@ -1,5 +1,5 @@
 import traceback
-from typing import Callable, List, Dict
+from typing import Callable, List, Dict, Optional
 
 from .irc_protocol import IrcProtocol
 
@@ -51,8 +51,7 @@ class Message:
         check_type("message", message, str)
         self.channel.send_message(message)
 
-# TODO: make Context
-# TODO: make Command
+
 class Context:
     """
     A command context, normally the first argument to a command.
@@ -180,6 +179,21 @@ class TwitchBot:
 
             ctx = Context(message)
             command.call(ctx, arguments)
+
+    def command(self, command_name: Optional[str] = None) -> Callable[[Callable], None]:
+        """
+        Register a function as a command.
+        """
+        def Decorator(func: Callable) -> None:
+            if command_name is None:
+                inner_command_name = func.__name__
+            else:
+                inner_command_name = command_name
+
+            command = Command(func)
+            self.commands[inner_command_name] = command
+
+        return Decorator
 
     def event_error(self, e):
         traceback.print_exc()
