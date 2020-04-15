@@ -24,9 +24,9 @@ from mytoken import TOKEN                   # this is oauth token you can get fr
 
 
 bot = TwitchBot()
-bot.connect("therealvivax", TOKEN)          # connect the bot with twitch servers
+bot.connect("the bots name", TOKEN)          # connect the bot with twitch servers
 
-channel = bot.join_channel("vivax3794")     # join your stream chat 
+channel = bot.join_channel("channel to join")     # join your stream chat 
 
 
 @bot.command()
