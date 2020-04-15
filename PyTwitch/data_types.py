@@ -50,6 +50,7 @@ class Context:
         self.message = message
         self.channel = message.channel
         self.user = message.user
+        self.bot = message.channel._bot
 
     def reply(self, message: str) -> None:
         """
