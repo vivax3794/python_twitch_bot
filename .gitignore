@@ -1,6 +1,6 @@
 secret.py
-main.py
 cogs/
+main.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
