@@ -87,5 +87,4 @@ class TwitchBot(TwitchCore):
         traceback.print_exc()
 
     def event_message(self, message: Message) -> None:
-        print(f"{message.user.name}: {message.content}")
         self.process_message(message)

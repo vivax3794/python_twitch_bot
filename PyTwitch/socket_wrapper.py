@@ -13,7 +13,6 @@ class SocketWrapper:
         """
         Connect to a server
         """
-        print("connecting to:", addr, port)
         self._sock.connect((addr, port))
 
     def send(self, data: str) -> None:
