@@ -68,7 +68,7 @@ class TwitchBot(TwitchCore):
             ctx = Context(message)
             command.call(ctx, arguments)
 
-    def command(self, command_name: Optional[str] = None) -> Callable[[Callable], None]:
+    def command(self, command_name: Optional[str] = None, aliases: List[str] = []) -> Callable[[Callable], None]:
         """
         Register a function as a command.
         """
@@ -80,6 +80,8 @@ class TwitchBot(TwitchCore):
 
             command = Command(func)
             self.commands[inner_command_name] = command
+            for alias in aliases:
+                self.commands[alias] = command
 
         return Decorator
 
