@@ -7,13 +7,13 @@ from .utils import check_type
 from .data_types import Message, Channel, User, Context, Command
 
 class TwitchBot(TwitchCore):
-    def __init__(self, *, prefix: str="!", client_id = None):
+    def __init__(self, *, prefix: str="!", client_id = None, api_retry_limit: int=5):
         super().__init__()
         self.commands: Dict[str, Commands] = {}
 
         check_type("prefix", prefix, str)
         self.prefix = prefix
-        self.api = TwitchApi(client_id)
+        self.api = TwitchApi(client_id, api_retry_limit)
 
     def run(self) -> None:
         """

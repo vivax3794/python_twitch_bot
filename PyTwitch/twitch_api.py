@@ -17,8 +17,10 @@ class TwitchApi:
     """
     A wrapper around the twitch api.
     """
-    def __init__(self, client_id: int):
+    def __init__(self, client_id: int, retry_limit: int=10):
         self.client_id = client_id
+        self.retry_limit = retry_limit
+
         self.session = requests.session()
         headers = {
                 "Client-ID": client_id
@@ -27,6 +29,27 @@ class TwitchApi:
 
         if client_id is None:
             warnings.warn("Client id not given, all api functions except chatters will not be functional. this does NOT include the chat functions like sending message.")
+
+    def _call_api(self, url: str, method: str="get"):
+        """
+        Calls the given url with the current session.
+        """
+        for retries_left in range(self.retry_limit, -1, -1):
+            if method == "get":
+                response = self.session.get(url)
+            elif method == "post":
+                response = self.session.get(url)
+            else:
+                raise ValueError(f"invalid method: {method}")
+
+            if response.status_code == 429:
+                # Rate limit error
+                if retries_left == 0:
+                    raise RatelimitError(f"Ratelimit retried reached ({self.retry_limit})")
+                warnings.warn("twitch api ratelimit hit, sleeping for 5 seconds. reties left: {}")
+
+            else:
+                return response
 
     def chatters(self, channel: str) -> Dict[str, List[str]]:
         """
