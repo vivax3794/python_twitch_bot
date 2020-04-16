@@ -7,7 +7,7 @@ from .utils import check_type
 from .data_types import Message, Channel, User, Context, Command
 
 class TwitchBot(TwitchCore):
-    def __init__(self, prefix: str="!", client_id = None):
+    def __init__(self, *, prefix: str="!", client_id = None):
         super().__init__()
         self.commands: Dict[str, Commands] = {}
 
