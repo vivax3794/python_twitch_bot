@@ -9,7 +9,6 @@ class ChannelInfo:
     def __init__(self, data):
         self.rank = data["broadcaster_type"]
         self.description = data["description"]
-        self.view_count = data["view_count"]
 
 class Channel:
     """
@@ -55,6 +54,24 @@ class Channel:
 
     def __eq__(self, other) -> bool:
         return self.name == other.name
+
+    @property
+    def stream(self):
+        """
+        The stream object representing this channel.
+        """
+        data = self._bot.api.stream_info(self.name)
+        return Stream(data)
+
+class Stream:
+    """
+    Like a channnel, but with more info on the stream.
+    """
+    def __init__(self, data):
+        self.name = data["user_name"]
+        self.game_id = data["game_id"]
+        self.title = data["title"]
+        self.views = data["viewer_count"]
 
 class User:
     """
