@@ -84,6 +84,11 @@ class TwitchApi:
         return chatters
 
     def user_info(self, username: str):
+        """
+        Get info on a twitch user.
+
+        see: https://dev.twitch.tv/docs/api/reference#get-users
+        """
         if self.client_id is None:
             raise NoClientId()
 
