@@ -1,4 +1,5 @@
 from typing import List, Dict
+from functools import lru_cache
 import warnings
 
 import requests
@@ -96,3 +97,9 @@ class TwitchApi:
         response = self._call_api(url)
 
         return response.json()["data"][0]
+
+    @lru_cache()
+    def get_user_id(self, username: str):
+        user_data = self.user_info(username)
+        return user_data["id"]
+
