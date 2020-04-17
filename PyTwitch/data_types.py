@@ -42,6 +42,9 @@ class Channel:
         data = self._bot.api.user_info(self.name)
         return ChannelInfo(data)
 
+    def __eq__(self, other: Channel) -> bool:
+        return self.name == other.name
+
 class User:
     """
     A twitch user.
@@ -64,6 +67,9 @@ class User:
 
         else:
             raise ValueError(f"user {self.name} was not found in the chatters list.")
+
+    def __eq__(self, other):
+        return self.name == other.name
 
 
 class Message:
@@ -110,3 +116,6 @@ class Command:
         Runs the command.
         """
         self.func(ctx, *arguments)
+
+    def __eq__(self, other):
+        return self.func == other.func

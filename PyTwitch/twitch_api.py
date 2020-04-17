@@ -91,4 +91,3 @@ class TwitchApi:
         response = self._call_api(url)
 
         return response.json()["data"][0]
-
