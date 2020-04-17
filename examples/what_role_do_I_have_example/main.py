@@ -8,7 +8,7 @@ CHANNEL = "vivax3794"
 bot = TwitchBot()
 bot.connect(BOT_NAME, TOKEN)
 
-channel = bot.join_channel(TOKEN)
+channel = bot.join_channel(CHANNEL)
 
 @bot.command("my-role")
 def my_role(ctx):

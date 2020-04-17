@@ -11,7 +11,7 @@ CHANNEL = "vivax3794"
 bot = TwitchBot()
 bot.connect(BOT_NAME, TOKEN)
 
-channel = bot.join_channel(TOKEN)
+channel = bot.join_channel(CHANNEL)
 
 for cog in COGS:
     bot.load_cog(f"cogs.{cog}")
