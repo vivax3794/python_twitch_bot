@@ -84,6 +84,23 @@ class TwitchApi:
 
         return chatters
 
+    def _pagination(self, url):
+        """
+        gets all the data from a url using the cursor value
+        """
+        cursor = ""
+        data = []
+        while True:
+            response = self._call_api(f"{url}&after={cursor}")
+            json = response.json()
+
+            cursor = json["pagination"]["cursor"]
+            new_data = json["data"]
+            data.extend(new_data)
+
+            if len(new_data) == 0:
+                break
+
     def user_info(self, username: str):
         """
         Get info on a twitch user.
@@ -103,3 +120,17 @@ class TwitchApi:
         user_data = self.user_info(username)
         return user_data["id"]
 
+    def following_info(self, to_name, from_name):
+        if to_name is not None:
+            to_id = self.get_user_id(to_name)
+        else:
+            to_if = None
+
+        if from_name is not None:
+            from_name = self.get_user_id(from_name)
+        else:
+            from_name = None
+
+        url = f"https://api.twitch.tv/helix/users/follows?to_id={to_id}&from_id={from_id}"
+        followers = self.pagination(url)
+        return followers
