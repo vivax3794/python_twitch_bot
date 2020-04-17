@@ -42,6 +42,17 @@ class Channel:
         data = self._bot.api.user_info(self.name)
         return ChannelInfo(data)
 
+    @property
+    def followers(self):
+        """
+        Who follows this channel.
+        """
+        followers = []
+        for connection in self._bot.api.following_info(to_id=self.name):
+            followers.append(connection["from_name"])
+
+        return followers
+
     def __eq__(self, other: Channel) -> bool:
         return self.name == other.name
 
