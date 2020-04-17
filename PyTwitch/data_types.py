@@ -68,6 +68,17 @@ class User:
         else:
             raise ValueError(f"user {self.name} was not found in the chatters list.")
 
+    @property
+    def following(self):
+        """
+        Who this person is following.
+        """
+        following  = []
+        for connection if self._bot.api.followers_info(from_name=self.name):
+            following.append(connection["to_name"])
+
+        return following
+
     def __eq__(self, other):
         return self.name == other.name
 
