@@ -1,34 +1,39 @@
-from typing import Callable, List
+from typing import Callable, List, Dict, Union
+from . import twitch_bot
 
-from .utils import check_type
 
 class ChannelInfo:
     """
     Contains info about a channel.
     """
-    def __init__(self, data):
+    def __init__(self, data: Dict[str, str]):
         self.rank = data["broadcaster_type"]
         self.description = data["description"]
+
 
 class Channel:
     """
     A twitch channel.
     """
-    def __init__(self, channel_name: str, twitch_bot):
+    def __init__(
+                self,
+                channel_name: str,
+                bot  # type: twitch_bot.TwitchBot
+                ) -> None:
         self.name = channel_name
-        self._bot = twitch_bot
+        self._bot = bot
 
-    def send_message(self, message: str):
+    def send_message(self, message: str) -> None:
         """
         Send a message in the channel.
         """
         self._bot.send_message(self.name, message)
 
     @property
-    def chatters(self):
+    def chatters(self) -> List[str]:
         return self._bot.api.chatters_no_roles(self.name)
 
-    def chatters_with_roles(self):
+    def chatters_with_roles(self) -> Dict[str, List[str]]:
         return self._bot.api.chatters(self.name)
 
     @property
@@ -42,32 +47,40 @@ class Channel:
         return ChannelInfo(data)
 
     @property
-    def followers(self):
+    def followers(self) -> List[str]:
         """
         Who follows this channel.
         """
-        followers = []
+        followers: List[str] = []
         for connection in self._bot.api.following_info(to_id=self.name):
             followers.append(connection["from_name"])
 
         return followers
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Channel):
+            raise NotImplementedError()
+
         return self.name == other.name
 
     @property
-    def stream(self):
+    def stream(self) -> "Stream":
         """
         The stream object representing this channel.
         """
         data = self._bot.api.stream_info(self.name)
         return Stream(data, self._bot)
 
+
 class Stream:
     """
     Like a channnel, but with more info on the stream.
     """
-    def __init__(self, data, bot):
+    def __init__(
+            self,
+            data: Dict[str, Union[str, int]],
+            bot  # type: twitch_bot.TwitchBot
+            ) -> None:
         self.name = data["user_name"]
         self.game_id = data["game_id"]
         self.title = data["title"]
@@ -76,7 +89,7 @@ class Stream:
         self._bot = bot
 
     @property
-    def game(self):
+    def game(self) -> str:
         """
         The name of the currently playing game.
         """
@@ -87,23 +100,27 @@ class User:
     """
     A twitch user.
     """
-    def __init__(self, username: str, channel: Channel, twitch_bot):
+    def __init__(
+            self,
+            username: str,
+            channel: Channel,
+            twitch_bot  # type: twitch_bot.TwitchBot
+            ) -> None:
         self.name = username
         self._channel = channel
         self._bot = twitch_bot
 
     @property
-    def channel(self):
+    def channel(self) -> Channel:
         """
         A channel reprisenting this users channel,
 
-        If you wanted the channel this users object was made form use "_channel"
+        If you wanted the channel this users object was made form use _channel
         """
         return Channel(self.name, self._bot)
 
-
     @property
-    def role(self):
+    def role(self) -> str:
         """
         The highest role of the user.
         """
@@ -114,31 +131,39 @@ class User:
                 return role
 
         else:
-            raise ValueError(f"user {self.name} was not found in the chatters list.")
+            raise ValueError(
+                    f"user {self.name} was not found in the chatters list."
+                    )
 
     @property
-    def following(self):
+    def following(self) -> List[str]:
         """
         Who this person is following.
         """
-        following  = []
+        following: List[str] = []
         for connection in self._bot.api.following_info(from_name=self.name):
             following.append(connection["to_name"])
 
         return following
 
-    def is_following(self):
+    def is_following(self) -> bool:
         """
         Checks if the user is following the channel.
 
-        Use this instead of checking if the username is in the channel followers.
-        Since this ask twitch directly if they are following and not for all followers.
+        Use this instead of checking if the username is in the followers.
+        Since this ask twitch directly if they are following.
         """
-        follow_info = self._bot.api.following_info(from_name=self.name, to_name=self._channel.name)
+        follow_info = self._bot.api.following_info(
+                from_name=self.name,
+                to_name=self._channel.name
+            )
+        # if they are following there will be 1 entry, that follow.
+        return len(follow_info) == 1
 
-        return len(follow_info) == 1 # if they are following there will be 1 entry, that follow.
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, User):
+            raise NotImplementedError()
 
-    def __eq__(self, other):
         return self.name == other.name
 
 
@@ -174,24 +199,28 @@ class Context:
         """
         self.message.reply(message)
 
-    def create_user(self, username):
+    def create_user(self, username: str) -> User:
         """
-        Create a user as if their message came from the channel the command was made in.
+        Create a user as if their message came from the commands channel.
         """
         return User(username, self.channel, self.bot)
+
 
 class Command:
     """
     A command it self
     """
-    def __init__(self, func: Callable[[Context, List[str]], None]):
+    def __init__(self, func: Callable[[Context, str], None]):
         self.func = func
 
-    def call(self, ctx: Context, arguments: List[any]) -> None:
+    def call(self, ctx: Context, arguments: List[str]) -> None:
         """
         Runs the command.
         """
         self.func(ctx, *arguments)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Command):
+            raise NotImplementedError()
+
         return self.func == other.func

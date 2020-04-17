@@ -6,7 +6,7 @@ class SocketWrapper:
     A wrapper around the standard python socket.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._sock = socket.socket()
 
     def connect(self, addr: str, port: int) -> None:
@@ -19,8 +19,8 @@ class SocketWrapper:
         """
         Send data over the socket
         """
-        data = (data + "\r\n").encode()
-        self._sock.sendall(data)
+        encoded_data: bytes = (data + "\r\n").encode()
+        self._sock.sendall(encoded_data)
 
     def read(self) -> str:
         """

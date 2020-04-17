@@ -6,11 +6,11 @@ class IrcProtocol:
     """
     Methods to interact with a irc server
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self._sock = SocketWrapper()
         self._data: List[str] = []
 
-    def connect(self, server: str, port: int=667) -> None:
+    def connect(self, server: str, port: int = 667) -> None:
         """
         Connect to a irc server.
 
