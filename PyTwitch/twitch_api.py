@@ -124,13 +124,13 @@ class TwitchApi:
         if to_name is not None:
             to_id = self.get_user_id(to_name)
         else:
-            to_if = None
+            to_id = None
 
         if from_name is not None:
-            from_name = self.get_user_id(from_name)
+            from_id = self.get_user_id(from_name)
         else:
-            from_name = None
+            from_id = None
 
         url = f"https://api.twitch.tv/helix/users/follows?to_id={to_id}&from_id={from_id}"
-        followers = self.pagination(url)
+        followers = self._pagination(url)
         return followers
