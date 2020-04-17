@@ -9,7 +9,7 @@ class ChannelInfo:
     def __init__(self, data):
         self.rank = data["broadcaster_type"]
         self.description = data["description"]
-        self.views = data["view_count"]
+        self.view_count = data["view_count"]
 
 class Channel:
     """
