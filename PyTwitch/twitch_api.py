@@ -13,6 +13,13 @@ class ResponseCodeError(ApiError):
     The response code of a request was not excpected.
     """
 
+class NoClientId(ApiError):
+    """
+    Client id is needed for this request
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__("Clientt id is needed for this request", *args, **kwargs)
+
 class TwitchApi:
     """
     A wrapper around the twitch api.
@@ -75,3 +82,13 @@ class TwitchApi:
             chatters.extend(users)
 
         return chatters
+
+    def user_info(self, username: str):
+        if self.client_id is None:
+            raise NoClientId()
+
+        url = f"https://api.twitch.tv/helix/users?login={username}"
+        response = self._call_api(url)
+
+        return response.json()["data"][0]
+
