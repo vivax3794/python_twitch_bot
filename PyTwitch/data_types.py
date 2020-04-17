@@ -26,6 +26,13 @@ class Channel:
         self._bot.send_message(self.name, message)
 
     @property
+    def chatters(self):
+        return self._bot.api.chatters_no_roles(self.name)
+
+    def chatters_with_roles(self):
+        return self._bot.api.chatters(self.name)
+
+    @property
     def info(self) -> ChannelInfo:
         """
         A class containing info about the channel.
