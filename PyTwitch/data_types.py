@@ -2,6 +2,15 @@ from typing import Callable, List
 
 from .utils import check_type
 
+class ChannelInfo:
+    """
+    Contains info about a channel.
+    """
+    def __init__(self, data):
+        self.rank = data["broadcaster_type"]
+        self.description = data["description"]
+        self.views = data["view_count"]
+
 class Channel:
     """
     A twitch channel.
@@ -16,6 +25,15 @@ class Channel:
         """
         self._bot.send_message(self.name, message)
 
+    @property
+    def info(self) -> ChannelInfo:
+        """
+        A class containing info about the channel.
+
+        From the api.
+        """
+        data = self._bot.api.user_info(self.name)
+        return ChannelInfo(data)
 
 class User:
     """
