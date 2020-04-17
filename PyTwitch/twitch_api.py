@@ -90,16 +90,15 @@ class TwitchApi:
         """
         cursor = ""
         data = []
-        while True:
+        while cursor is not None:
             response = self._call_api(f"{url}&after={cursor}")
             json = response.json()
 
-            cursor = json["pagination"]["cursor"]
+            cursor = json["pagination"].get("cursor")
             new_data = json["data"]
             data.extend(new_data)
 
-            if len(new_data) == 0:
-                break
+        return data
 
     def user_info(self, username: str):
         """
