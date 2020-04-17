@@ -139,6 +139,6 @@ class TwitchApi:
         Information about a stream.
         """
         url = f"https://api.twitch.tv/helix/streams?user_login={streamer_name}"
-        data = self._call_api(url)
+        data = self._call_api(url).json()
 
         return data["data"][0]
