@@ -174,6 +174,12 @@ class Context:
         """
         self.message.reply(message)
 
+    def create_user(self, username):
+        """
+        Create a user as if their message came from the channel the command was made in.
+        """
+        return User(username, self.channel, self.bot)
+
 class Command:
     """
     A command it self
