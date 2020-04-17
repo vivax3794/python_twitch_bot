@@ -142,3 +142,8 @@ class TwitchApi:
         data = self._call_api(url).json()
 
         return data["data"][0]
+
+    def get_game(self, game_id):
+        url = f"https://api.twitch.tv/helix/games?id={game_id}"
+        data = self._call_api(url).json()
+        return data["data"][0]["name"]
