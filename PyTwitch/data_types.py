@@ -89,15 +89,25 @@ class User:
     """
     def __init__(self, username: str, channel: Channel, twitch_bot):
         self.name = username
-        self.channel = channel
+        self._channel = channel
         self._bot = twitch_bot
+
+    @property
+    def channel(self):
+        """
+        A channel reprisenting this users channel,
+
+        If you wanted the channel this users object was made form use "_channel"
+        """
+        return Channel(self.name, self._bot)
+
 
     @property
     def role(self):
         """
         The highest role of the user.
         """
-        chatters = self._bot.api.chatters(self.channel.name)
+        chatters = self._bot.api.chatters(self._channel.name)
         for role, users in chatters.items():
             if self.name in users:
                 role = role.rstrip("s")
@@ -124,7 +134,7 @@ class User:
         Use this instead of checking if the username is in the channel followers.
         Since this ask twitch directly if they are following and not for all followers.
         """
-        follow_info = self._bot.api.following_info(from_name=self.name, to_name=self.channel.name)
+        follow_info = self._bot.api.following_info(from_name=self.name, to_name=self._channel.name)
 
         return len(follow_info) == 1 # if they are following there will be 1 entry, that follow.
 
