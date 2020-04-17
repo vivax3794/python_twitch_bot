@@ -133,3 +133,17 @@ class TwitchApi:
         url = f"https://api.twitch.tv/helix/users/follows?to_id={to_id}&from_id={from_id}"
         followers = self._pagination(url)
         return followers
+
+    def stream_info(self, streamer_name: str):
+        """
+        Information about a stream.
+        """
+        url = f"https://api.twitch.tv/helix/streams?user_login={streamer_name}"
+        data = self._call_api(url).json()
+
+        return data["data"][0]
+
+    def get_game(self, game_id):
+        url = f"https://api.twitch.tv/helix/games?id={game_id}"
+        data = self._call_api(url).json()
+        return data["data"][0]["name"]
