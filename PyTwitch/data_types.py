@@ -61,17 +61,27 @@ class Channel:
         The stream object representing this channel.
         """
         data = self._bot.api.stream_info(self.name)
-        return Stream(data)
+        return Stream(data, self._bot)
 
 class Stream:
     """
     Like a channnel, but with more info on the stream.
     """
-    def __init__(self, data):
+    def __init__(self, data, bot):
         self.name = data["user_name"]
         self.game_id = data["game_id"]
         self.title = data["title"]
         self.views = data["viewer_count"]
+
+        self._bot = bot
+
+    @property
+    def game(self):
+        """
+        The name of the currently playing game.
+        """
+        return self._bot.api.get_game(self.game_id)
+
 
 class User:
     """
