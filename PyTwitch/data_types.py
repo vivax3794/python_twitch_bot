@@ -53,7 +53,7 @@ class Channel:
 
         return followers
 
-    def __eq__(self, other: Channel) -> bool:
+    def __eq__(self, other) -> bool:
         return self.name == other.name
 
 class User:
@@ -85,10 +85,21 @@ class User:
         Who this person is following.
         """
         following  = []
-        for connection if self._bot.api.followers_info(from_name=self.name):
+        for connection in self._bot.api.following_info(from_name=self.name):
             following.append(connection["to_name"])
 
         return following
+
+    def is_following(self):
+        """
+        Checks if the user is following the channel.
+
+        Use this instead of checking if the username is in the channel followers.
+        Since this ask twitch directly if they are following and not for all followers.
+        """
+        follow_info = self._bot.api.following_info(from_name=self.name, to_name=self.channel.name)
+
+        return len(follow_info) == 1 # if they are following there will be 1 entry, that follow.
 
     def __eq__(self, other):
         return self.name == other.name
