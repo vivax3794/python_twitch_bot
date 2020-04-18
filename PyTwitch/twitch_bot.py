@@ -4,12 +4,13 @@ from typing import Callable, List, Dict, Optional
 from .twitch_core import TwitchCore
 from .twitch_api import TwitchApi
 from .utils import check_type
-from .data_types import Message, Channel, User, Context, Command
+from .data_types import Message, Context, Command
+
 
 class TwitchBot(TwitchCore):
-    def __init__(self, *, prefix: str="!", client_id = None, api_retry_limit: int=5):
+    def __init__(self, *, prefix: str = "!", client_id: Optional[str] = None, api_retry_limit: int = 5):
         super().__init__()
-        self.commands: Dict[str, Commands] = {}
+        self.commands: Dict[str, Command] = {}
 
         check_type("prefix", prefix, str)
         self.prefix = prefix
@@ -27,7 +28,7 @@ class TwitchBot(TwitchCore):
             except Exception as e:
                 self.event_error(e)
 
-    def _import_cog(self, current_object, import_paths: List[None]):
+    def _import_cog(self, current_object: object, import_paths: List[str]) -> object:
         if len(import_paths) == 0:
             return current_object
 
@@ -50,10 +51,10 @@ class TwitchBot(TwitchCore):
             def test(ctx):
                 ctx.reply("Hello World!")
         """
-        cog = __import__(cog_name)
+        cog: object = __import__(cog_name)
         import_path = cog_name.split(".")[1:]
         cog = self._import_cog(cog, import_path)
-        cog.setup(self)
+        cog.setup(self)  # type: ignore
 
     def process_message(self, message: Message) -> None:
         """
@@ -70,13 +71,17 @@ class TwitchBot(TwitchCore):
             ctx = Context(message)
             command.call(ctx, arguments)
 
-    def command(self, command_name: Optional[str] = None, aliases: List[str] = []) -> Callable[[Callable], None]:
+    def command(self,
+                command_name: Optional[str] = None,
+                aliases: List[str] = []
+                ) -> Callable[[Callable[..., None]], None]:
+
         """
         Register a function as a command.
         """
-        def Decorator(func: Callable) -> None:
+        def Decorator(func: Callable[..., None]) -> None:
             if command_name is None:
-                inner_command_name = func.__name__
+                inner_command_name: str = func.__name__
             else:
                 inner_command_name = command_name
 
@@ -87,7 +92,7 @@ class TwitchBot(TwitchCore):
 
         return Decorator
 
-    def event_error(self, e):
+    def event_error(self, e: Exception) -> None:
         traceback.print_exc()
 
     def event_message(self, message: Message) -> None:

@@ -1,12 +1,15 @@
-from typing import Callable, List, Dict, Union
+from typing import Callable, List, Dict
 from . import twitch_bot
+
+# used for type hinting
+from .twitch_api import UserInfo, StreamInfo
 
 
 class ChannelInfo:
     """
     Contains info about a channel.
     """
-    def __init__(self, data: Dict[str, str]):
+    def __init__(self, data: UserInfo):
         self.rank = data["broadcaster_type"]
         self.description = data["description"]
 
@@ -52,7 +55,7 @@ class Channel:
         Who follows this channel.
         """
         followers: List[str] = []
-        for connection in self._bot.api.following_info(to_id=self.name):
+        for connection in self._bot.api.following_info(to_name=self.name):
             followers.append(connection["from_name"])
 
         return followers
@@ -78,11 +81,11 @@ class Stream:
     """
     def __init__(
             self,
-            data: Dict[str, Union[str, int]],
+            data: StreamInfo,
             bot  # type: twitch_bot.TwitchBot
             ) -> None:
         self.name = data["user_name"]
-        self.game_id = data["game_id"]
+        self.game_id = int(data["game_id"])
         self.title = data["title"]
         self.views = data["viewer_count"]
 
@@ -210,7 +213,7 @@ class Command:
     """
     A command it self
     """
-    def __init__(self, func: Callable[[Context, str], None]):
+    def __init__(self, func: Callable[[Context], None]):
         self.func = func
 
     def call(self, ctx: Context, arguments: List[str]) -> None:
