@@ -77,6 +77,9 @@ class Channel:
     def __str__(self) -> str:
         return self.name
 
+    def __repr__(self) -> str:
+        return f"Channel(name={self.name})"
+
 
 class Stream:
     """
@@ -178,6 +181,9 @@ class User:
     def __str__(self) -> str:
         return self.name
 
+    def __repr__(self) -> str:
+        return f"User(name={self.name})"
+
 
 class Message:
     """
@@ -196,6 +202,9 @@ class Message:
 
     def __str__(self) -> str:
         return f"#{self.channel} {self.user}: {self.content}"
+
+    def __repr__(self) -> str:
+        return f"Message(channel={self.channel}, user={self.user})"
 
 
 class Context:
@@ -239,3 +248,6 @@ class Command:
             raise NotImplementedError()
 
         return self.func == other.func
+
+    def __repr__(self) -> str:
+        return f"Command(func={self.func})"
