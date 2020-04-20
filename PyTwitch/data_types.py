@@ -60,6 +60,14 @@ class Channel:
 
         return followers
 
+    @property
+    def stream(self) -> "Stream":
+        """
+        The stream object representing this channel.
+        """
+        data = self._bot.api.stream_info(self.name)
+        return Stream(data, self._bot)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Channel):
             raise NotImplementedError()
@@ -68,14 +76,6 @@ class Channel:
 
     def __str__(self) -> str:
         return self.name
-
-    @property
-    def stream(self) -> "Stream":
-        """
-        The stream object representing this channel.
-        """
-        data = self._bot.api.stream_info(self.name)
-        return Stream(data, self._bot)
 
 
 class Stream:
