@@ -71,8 +71,6 @@ class Channel:
         """
         The stream object representing this channel.
         """
-        # TODO: should we return None instead of raising a error here?
-        # (If the streamer is not live)
         data = self._bot.api.stream_info(self.name)
         return Stream(data, self._bot)
 
