@@ -50,8 +50,6 @@ ApiRespons = TypedDict("ApiRespons", {
     })
 
 
-
-
 class TwitchApi:
     """
     A wrapper around the twitch api.

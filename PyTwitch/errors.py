@@ -29,6 +29,7 @@ class StreamerNotLiveError(ApiError, ValueError):
     The streamer is offline.
     """
 
+
 class CommandNotFoundError(KeyError):
     """
     The command was not found.
