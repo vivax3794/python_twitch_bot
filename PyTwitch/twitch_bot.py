@@ -27,7 +27,7 @@ class TwitchBot(TwitchCore):
             try:
                 self.event_message(message)
             except Exception as e:
-                self.event_error(e)
+                self.event_error(message, e)
 
     def _import_cog(self, current_object: object, import_paths: List[str]) -> object:
         if len(import_paths) == 0:
@@ -109,7 +109,7 @@ class TwitchBot(TwitchCore):
 
         setattr(self, event_name, func)
 
-    def event_error(self, e: Exception) -> None:
+    def event_error(self, message: Message, e: Exception) -> None:
         traceback.print_exc()
 
     def event_message(self, message: Message) -> None:
