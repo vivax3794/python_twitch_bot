@@ -46,7 +46,8 @@ StreamInfo = TypedDict("StreamInfo", {
 JsonData = Dict[str, Union[str, int]]
 ApiRespons = TypedDict("ApiRespons", {
     "pagination": Dict[str, str],
-    "data": List[JsonData]
+    "data": List[JsonData],
+    "total": int
     })
 
 
@@ -169,6 +170,24 @@ class TwitchApi:
         url = f"https://api.twitch.tv/helix/users/follows?to_id={to_id}&from_id={from_id}"
         followers: List[FollowingInfo] = self._pagination(url)  # type: ignore
         return followers
+
+    def get_following_ammount(self, to_name: Optional[str] = None, from_name: Optional[str] = None) -> int:
+        to_id: Optional[int]
+        from_id: Optional[int]
+
+        if to_name is not None:
+            to_id = self.get_user_id(to_name)
+        else:
+            to_id = None
+
+        if from_name is not None:
+            from_id = self.get_user_id(from_name)
+        else:
+            from_id = None
+
+        url = f"https://api.twitch.tv/helix/users/follows?to_id={to_id}&from_id={from_id}"
+        data = self._call_api(url)
+        return data["total"]
 
     def stream_info(self, streamer_name: str) -> StreamInfo:
         """
