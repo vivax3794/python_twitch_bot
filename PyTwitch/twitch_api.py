@@ -170,8 +170,6 @@ class TwitchApi:
         followers: List[FollowingInfo] = self._pagination(url)  # type: ignore
         return followers
 
-    # BUG: only works if they are live
-    # look into how it can be done if they are offline
     def stream_info(self, streamer_name: str) -> StreamInfo:
         """
         Information about a stream.
