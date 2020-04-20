@@ -154,7 +154,7 @@ class User:
         Checks if the user is following the channel.
 
         Use this instead of checking if the username is in the followers.
-        Since this ask twitch directly if they are following.
+        Since this asks twitch directly if they are following.
         """
         follow_info = self._bot.api.following_info(
                 from_name=self.name,
