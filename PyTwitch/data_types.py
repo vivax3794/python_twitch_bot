@@ -66,6 +66,9 @@ class Channel:
 
         return self.name == other.name
 
+    def __str__(self) -> str:
+        return self.name
+
     @property
     def stream(self) -> "Stream":
         """
@@ -97,6 +100,9 @@ class Stream:
         The name of the currently playing game.
         """
         return self._bot.api.get_game(self.game_id)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class User:
@@ -169,6 +175,9 @@ class User:
 
         return self.name == other.name
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Message:
     """
@@ -184,6 +193,9 @@ class Message:
         Reply to the message.
         """
         self.channel.send_message(message)
+
+    def __str__(self) -> str:
+        return f"#{self.channel} {self.user}: {self.content}"
 
 
 class Context:
