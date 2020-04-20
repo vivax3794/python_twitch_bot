@@ -94,6 +94,21 @@ class TwitchBot(TwitchCore):
 
         return Decorator
 
+    def event(self, func: Callable[..., None]) -> None:
+        """
+        Register a function as a event handler.
+
+        Events are functions that start with "event_" in the TwitchBot class.
+        """
+        event_name: str = func.__name__
+        if not event_name.startswith("event_"):
+            raise ValueError(f"Invaliad event name: {event_name}. all events must start with 'event_'")
+
+        if not hasattr(self, event_name):
+            raise AttributeError(f"TwitchBot has no event {event_name}")
+
+        setattr(self, event_name, func)
+
     def event_error(self, e: Exception) -> None:
         traceback.print_exc()
 
