@@ -239,9 +239,9 @@ class Context:
         """
         self.message.reply(message)
 
-    def create_user(self, username: str) -> User:
+    def get_user(self, username: str) -> User:
         """
-        Create a user as if their message came from the commands channel.
+        Get a user object out from the name.
         """
         return User(username, self.channel, self.bot)
 
