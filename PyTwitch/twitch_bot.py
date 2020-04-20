@@ -5,6 +5,7 @@ from .twitch_core import TwitchCore
 from .twitch_api import TwitchApi
 from .utils import check_type
 from .data_types import Message, Context, Command
+from .errors import CommandNotFoundError
 
 
 class TwitchBot(TwitchCore):
@@ -66,7 +67,7 @@ class TwitchBot(TwitchCore):
             command_name, *arguments = message.content[len(self.prefix):].split(" ")
             command = self.commands.get(command_name)
             if command is None:
-                raise ValueError(f"Command {command_name} not found")
+                raise CommandNotFoundError(f"Command {command_name} not found")
 
             ctx = Context(message)
             command.call(ctx, arguments)
