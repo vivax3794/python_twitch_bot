@@ -74,6 +74,12 @@ class RatelimitError(ApiError):
     """
 
 
+class StreamerNotLiveError(ApiError, ValueError):
+    """
+    The streamer is offline.
+    """
+
+
 class TwitchApi:
     """
     A wrapper around the twitch api.
@@ -202,6 +208,8 @@ class TwitchApi:
         """
         url = f"https://api.twitch.tv/helix/streams?user_login={streamer_name}"
         data = self._call_api(url)
+        if len(data["data"]) == 0:
+            raise StreamerNotLiveError(f"The requested streamer {streamer_name} is not live, and we can not get their info.")
         stream_data: StreamInfo = data["data"][0]  # type: ignore
 
         return stream_data
