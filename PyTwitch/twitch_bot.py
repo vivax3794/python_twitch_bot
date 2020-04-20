@@ -62,6 +62,7 @@ class TwitchBot(TwitchCore):
         Check if the message is a command.
 
         If it is a command, fetch the command object and construct a ctx.
+        Then call the command.
         """
         if message.content.startswith(self.prefix):
             command_name, *arguments = message.content[len(self.prefix):].split(" ")
