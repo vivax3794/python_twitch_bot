@@ -61,6 +61,14 @@ class Channel:
         return followers
 
     @property
+    def num_followers(self) -> int:
+        """
+        The number of users that follow this channel.
+        """
+        follow_count = self._bot.api.get_following_ammount(to_name=self.name)
+        return follow_count
+
+    @property
     def stream(self) -> "Stream":
         """
         The stream object representing this channel.
@@ -157,6 +165,14 @@ class User:
             following.append(connection["to_name"])
 
         return following
+
+    @property
+    def num_following(self) -> int:
+        """
+        The number of users this user follows.
+        """
+        follow_count = self._bot.api.get_following_ammount(from_name=self.name)
+        return follow_count
 
     def is_following(self) -> bool:
         """
