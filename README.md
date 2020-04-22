@@ -20,7 +20,7 @@ pip install .
 
 ```py
 from PyTwitch import TwitchBot
-from mytoken import TOKEN                   # this is oauth token you can get from https://dev.twitch.tv/docs/irc 
+from mytoken import TOKEN                   # this is oauth token you can get from https://twitchapps.com/tmi/
 
 
 bot = TwitchBot()
