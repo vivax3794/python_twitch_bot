@@ -6,7 +6,7 @@ from secret import TOKEN, CLIENT_ID
 BOT_NAME = "therealvivax"
 CHANNEL = "vivax3794"
 
-bot = TwitchBot()
+bot = TwitchBot(client_id=CLIENT_ID)
 bot.connect(BOT_NAME, TOKEN)
 
 channel = bot.join_channel(CHANNEL)
